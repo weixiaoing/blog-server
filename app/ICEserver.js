@@ -1,6 +1,6 @@
 module.exports = (io, socket) => {
   socket.on("offer", ({ sdp, myId, roomId }) => {
-    console.log("offer");
+    console.log("offer", sdp);
     socket.to(roomId).emit("call", { sdp });
   });
   socket.on("answer", ({ sdp, myId, roomId }) => {
