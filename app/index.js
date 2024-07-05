@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const registerUserHandlers = require("./userHandler");
 const ICEServerHandlers = require("./ICEserver");
 const PORT = 4000;
+const logger = require("./logger");
 const app = express();
 require("dotenv").config("../env");
 const server = require("http").Server(app);
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 //   })
 // );
 app.get("/api", (req, res) => {
+  logger.info("Handling / route");
   res.json({
     message: "Hello world",
   });
