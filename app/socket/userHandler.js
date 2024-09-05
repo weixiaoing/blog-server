@@ -1,4 +1,5 @@
-const comments = require("./models/comment");
+const { getCommentList, createComment, replay } = require("../control/comment");
+const comments = require("../models/comment");
 
 module.exports = (io, socket) => {
   socket.join("Home");
@@ -10,39 +11,29 @@ module.exports = (io, socket) => {
   socket.on("joinRoom", ({ room }) => {
     console.log("joinRoom", room);
     socket.join(room);
-    try {
-      comments.find({ postId: room }).then((data) => {
-        setTimeout(() => {
-          socket.emit(
-            "listInit",
-            data
-              .map((item) => {
-                console.log("time", item.timeAt);
-                return { msg: item.text, timeAt: Number(item.timeAt) };
-              })
-              .sort((a, b) => b.timeAt - a.timeAt)
-          );
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
+
+    getCommentList({ postId: room }).then((data) => {
+      console.log("initdata", data);
+
+      socket.emit("listInit", data);
+    });
   });
 
   socket.on("send", ({ room = "Home", msg }) => {
     console.log("send", room);
-    const timeAt = Date.now();
-    try {
-      comments.create({ postId: room, text: msg, timeAt }).then((data) => {
-        console.log(data.timeAt);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    console.log("timeAt", timeAt);
-    io.to(room).emit("chatList", {
-      msg,
-      timeAt,
+    createComment({ postId: room, content: msg }).then((data) => {
+      console.log(data);
+      io.to(room).emit("chatList", data.data);
+    });
+  });
+  socket.on("replay", ({ parentId, postId = "Home", content }) => {
+    replay({
+      postId,
+      content,
+      parentId,
+    }).then((data) => {
+      console.log(postId);
+      io.to(postId).emit("subChatOut", data.data);
     });
   });
 
