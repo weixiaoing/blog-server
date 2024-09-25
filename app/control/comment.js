@@ -5,18 +5,6 @@
 
 const comment = require("../models/comment");
 
-// router.post("/comment", (req, res) => {
-//   console.log(req.body);
-
-//   try {
-//     comment.create(req.body).then((data) => {
-//       console.log(data);
-//       res.json(data);
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 const createComment = async (req) => {
   console.log(req);
   return comment
