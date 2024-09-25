@@ -15,14 +15,16 @@ const { expressjwt } = require("express-jwt");
 const secretKey = "Hello";
 const fs = require("fs");
 const path = require("path");
-const tokenStr = jwt.sign({ username: "admin", password: "123456" }, secretKey);
+// const tokenStr = jwt.sign({ username: "admin", password: "123456" }, secretKey);
 const socketIO = new Server(4040, {
   cors: true,
 });
-const commentRoutes = require("./routes/comment");
+const postRoutes = require("./routes/post");
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// file upload
 const uploadPath = path.join(process.cwd(), "uploads");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -34,12 +36,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-app.get("/api", (req, res) => {
+// route
+app.get("/test", (req, res) => {
   res.json({
     message: "Hello world",
   });
 });
-app.use("/test", commentRoutes);
+app.use("/post", postRoutes);
 
 app.post("/upload", upload.single("img"), (req, res) => {
   res.send("ok");
@@ -60,8 +63,6 @@ app.post("/merge", async (req, res) => {
 
   res.send("ok");
 });
-
-
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
