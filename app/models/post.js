@@ -3,12 +3,12 @@ const postSchema = new mongoose.Schema({
   // 名称
   title: {
     type: String,
-    default: "draw your mind",
+    default: "New Post",
   },
   //   内容
   content: {
     type: String,
-    default: "# draw your mind",
+    default: "",
   },
   //   标签
   tags: {
@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
   //   摘要
   summary: {
     type: String,
-    default: "need some summary",
+    default: "",
   },
   //   状态
   status: {
@@ -43,7 +43,7 @@ const postSchema = new mongoose.Schema({
   },
   cover: {
     type: String,
-    default: "https://www.notion.so/images/page-cover/solid_beige.png",
+    default: "",
   },
 });
 

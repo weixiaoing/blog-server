@@ -1,8 +1,6 @@
 // routes.js
-
 const express = require("express");
 const router = express.Router();
-
 const {
   createPost,
   findPost,
@@ -12,9 +10,6 @@ const {
 } = require("../control/post");
 // 帖子相关路由
 router.post("/create", (req, res) => {
-  console.log("create");
-
-  console.log(req.body);
   createPost(req.body)
     .then((data) => {
       res.json({
@@ -31,7 +26,9 @@ router.post("/create", (req, res) => {
     });
 });
 
-router.get("/findPostMeta", (req, res) => {
+router.post("/findPostMeta", (req, res) => {
+  console.log(req.body);
+
   findPostMeta(req.body)
     .then((data) => {
       res.json({
@@ -49,8 +46,9 @@ router.get("/findPostMeta", (req, res) => {
 });
 
 router.post("/findPost", (req, res) => {
-  console.log(req.body);
   const props = req.body;
+  console.log(props);
+
   findPost(props)
     .then((data) => {
       res.json({
