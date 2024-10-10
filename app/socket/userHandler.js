@@ -13,8 +13,6 @@ module.exports = (io, socket) => {
     socket.join(room);
 
     getCommentList({ postId: room }).then((data) => {
-      console.log("initdata", data);
-
       socket.emit("listInit", data);
     });
   });
