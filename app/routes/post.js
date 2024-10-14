@@ -7,6 +7,7 @@ const {
   deletePost,
   updatePost,
   findPostMeta,
+  findWithPage,
 } = require("../control/post");
 // 帖子相关路由
 router.post("/create", (req, res) => {
@@ -28,8 +29,24 @@ router.post("/create", (req, res) => {
 
 router.post("/findPostMeta", (req, res) => {
   console.log(req.body);
-
   findPostMeta(req.body)
+    .then((data) => {
+      res.json({
+        status: 1,
+        message: "查询成功",
+        data,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        status: 0,
+        message: error,
+      });
+    });
+});
+
+router.post("/findWithPage", (req, res) => {
+  findWithPage(req.body)
     .then((data) => {
       res.json({
         status: 1,

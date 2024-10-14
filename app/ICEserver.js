@@ -8,7 +8,6 @@ module.exports = (io, socket) => {
   });
   socket.on("candidate", async ({ candidate, myId, roomId }) => {
     console.log("candidate");
-
     socket.to(roomId).emit("candidate", { candidate });
   });
   socket.on("hang-down-server", ({ id, roomId }) => {
