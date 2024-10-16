@@ -41,6 +41,10 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
   cover: {
     type: String,
     default: "",

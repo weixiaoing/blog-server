@@ -5,7 +5,7 @@ module.exports = (io, socket) => {
   socket.join("Home");
   socket.to("Home").emit("info", { text: `${socket.id}进入了聊天室` });
   socket.on("secrectMessage", ({ toId, msg }) => {
-    socket.to(toId).emit("secrectMessage", socket.id, msg);
+    io.to(toId).emit("secrectMessage", socket.id, msg);
   });
 
   socket.on("joinRoom", ({ room }) => {
@@ -17,9 +17,11 @@ module.exports = (io, socket) => {
     });
   });
 
-  socket.on("send", ({ room = "Home", msg }) => {
+  socket.on("send", ({ room = "Home", message }) => {
     console.log("send", room);
-    createComment({ postId: room, content: msg }).then((data) => {
+    console.log("message", message);
+
+    createComment({ postId: room, ...message }).then((data) => {
       console.log(data);
       io.to(room).emit("chatList", data.data);
     });
@@ -34,19 +36,4 @@ module.exports = (io, socket) => {
       io.to(postId).emit("subChatOut", data.data);
     });
   });
-
-  // socket.on("offer", ({ offer, roomId }) => {
-  //   console.log("offer", offer, roomId);
-  //   socket.to(roomId).emit("offer", offer, roomId);
-  // });
-
-  // socket.on("ice-candidate", (candidate, roomId) => {
-  //   console.log("icecandidate", roomId);
-  //   socket.broadcast.to(roomId).emit("ice-candidate", candidate);
-  // });
-
-  // socket.on("answer", (answer, roomId) => {
-  //   console.log("answer", roomId);
-  //   socket.broadcast.to(roomId).emit("answer", answer);
-  // });
 };

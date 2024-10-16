@@ -4,6 +4,7 @@ const commentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   content: {
     type: String,
     required: true,
@@ -24,6 +25,9 @@ const commentSchema = new mongoose.Schema({
     },
   ],
   userId: String,
+  name: String,
+  avatar: String,
+  website: String,
 });
 
 module.exports = mongoose.model("Comments", commentSchema, "comment");
