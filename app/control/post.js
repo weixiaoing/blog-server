@@ -49,14 +49,15 @@ const findWithPage = async (req) => {
 };
 
 const updatePost = async (req) => {
+  console.log("updatePost", req);
+
   return post
     .findByIdAndUpdate(req._id, {
-      $currentDate: {
-        updatedAt: true,
-      },
-      $set: { ...req.config },
+      $set: { ...req.config, updatedAt: new Date() },
     })
     .then((data) => {
+      console.log("data", data);
+
       return data;
     });
 };

@@ -22,7 +22,7 @@ const socketIO = new Server(4040, {
 const postRoutes = require("./routes/post");
 const fileRoutes = require("./routes/file");
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // route
@@ -33,8 +33,9 @@ app.get("/test", (req, res) => {
 });
 app.use("/post", postRoutes);
 
-// app.use("/file", fileRoutes);
-// app.use(express.static("static"));
+app.use("/file", fileRoutes);
+app.use("/summary", require("./routes/summary"));
+app.use(express.static("static"));
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

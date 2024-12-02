@@ -9,6 +9,8 @@ const {
   findPostMeta,
   findWithPage,
 } = require("../control/post");
+const { default: OpenAI } = require("openai");
+
 // 帖子相关路由
 router.post("/create", (req, res) => {
   createPost(req.body)
@@ -109,11 +111,44 @@ router.post("/update", (req, res) => {
       });
     })
     .catch((error) => {
+      console.log(error);
+
       res.json({
         status: 0,
         message: "更新失败",
       });
     });
+});
+
+router.post("/aiwrite", async (req, res) => {
+  const { content } = req.body;
+  const getAi = async (content) => {
+    const openai = new OpenAI({
+      apiKey: "ak-sxNjLLkhMJc5Q1I3dQGcKdLglSrxaELbiEBYIZVyNMFK6KOb",
+      baseURL: "https://api.nextapi.fun/v1",
+    });
+    const completion = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "user",
+          content: ` Continue write this Article in "zh" language
+          start with:
+    "${content}"
+    
+    CONCISE SUMMARY:`,
+        },
+      ],
+      model: "gpt-3.5-turbo",
+    });
+    const summary = completion.choices[0].message.content;
+    return summary;
+  };
+  try {
+    const data = await getAi(content);
+    res.json({ status: 1, data });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

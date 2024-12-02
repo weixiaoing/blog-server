@@ -2,3 +2,6 @@
 /.env
 /video
 /upload
+/source
+/static
+/temp

@@ -1,4 +1,9 @@
-const { getCommentList, createComment, replay } = require("../control/comment");
+const {
+  getCommentList,
+  createComment,
+  replay,
+  reply,
+} = require("../control/comment");
 const comments = require("../models/comment");
 
 module.exports = (io, socket) => {
@@ -26,14 +31,16 @@ module.exports = (io, socket) => {
       io.to(room).emit("chatList", data.data);
     });
   });
-  socket.on("replay", ({ parentId, postId = "Home", content }) => {
-    replay({
-      postId,
-      content,
-      parentId,
-    }).then((data) => {
-      console.log(postId);
-      io.to(postId).emit("subChatOut", data.data);
-    });
+  socket.on("reply", ({ postId = "Home", ...data } = data) => {
+    console.log("reply", data);
+    reply({ postId, ...data })
+      .then((data) => {
+        console.log("sucess", postId);
+        console.log(data.data);
+        io.to(postId).emit("subChatOut", data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
 };
