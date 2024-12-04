@@ -32,7 +32,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${ env.IMAGE_NAME }:latest
 
       - name: SSH deploy
         uses: appleboy/ssh-action@master
@@ -42,7 +42,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           # port: ${{ secrets.SSH_PORT }}
           script: |
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:latest
-            docker stop $CONTAINER_NAME || true
-            docker rm $CONTAINER_NAME || true
-            docker run -e MONGO_URI=${{ secrets.MONGO_URI }} -d -p 3000:3000 4040:4040 --name ${} $CONTAINER_NAME ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:latest
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${ env.IMAGE_NAME }:latest
+            docker stop ${ env.CONTAINER_NAME } || true
+            docker rm ${ env.CONTAINER_NAME } || true
+            docker run -e MONGO_URI=${{ secrets.MONGO_URI }} -d -p 4000:4000 4040:4040 --name ${env.CONTAINER_NAME} ${{ secrets.DOCKER_HUB_USERNAME }}/${ env.IMAGE_NAME }:latest
