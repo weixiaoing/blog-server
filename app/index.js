@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const registerUserHandlers = require("./socket/userHandler");
 const ICEServerHandlers = require("./ICEserver");
-const PORT = 4000;
+
 const logger = require("logger");
 const app = express();
 require("dotenv").config("../env");
@@ -15,25 +15,27 @@ const { expressjwt } = require("express-jwt");
 const secretKey = "Hello";
 const fs = require("fs");
 const path = require("path");
-
-const socketIO = new Server(4040, {
+// 服务器响应端口
+const PORT = process.env.SERVER_PORT || 4000;
+// socket端口
+const SOCKETPORT = process.env.SOCKER_PORT || 4040;
+const socketIO = new Server(SOCKETPORT, {
   cors: true,
 });
-const postRoutes = require("./routes/post");
-const fileRoutes = require("./routes/file");
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // route
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   res.json({
-    message: "Hello world",
+    message: "Hello !",
   });
 });
-app.use("/post", postRoutes);
+app.use("/post", require("./routes/post"));
 
-app.use("/file", fileRoutes);
+app.use("/file", require("./routes/file"));
 app.use("/summary", require("./routes/summary"));
 app.use(express.static("static"));
 server.listen(PORT, () => {

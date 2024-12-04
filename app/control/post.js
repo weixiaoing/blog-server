@@ -11,7 +11,6 @@ const findPostMeta = async (req) => {
   if (req?.tags?.length > 0) {
     req.tags = { $in: req.tags };
   }
-
   return post
     .find(
       {
