@@ -46,4 +46,4 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{env.IMAGE_NAME}}:latest
             sudo docker stop ${{env.CONTAINER_NAME}} || true
             sudo docker rm ${{env.CONTAINER_NAME}} || true
-            sudo docker run -e MONGO_URI=${{ secrets.MONGO_URI }}  -p 4000:4000 4040:4040 --name ${{env.CONTAINER_NAME}} ${{ secrets.DOCKER_HUB_USERNAME }}/${{env.IMAGE_NAME}}:latest
+            sudo docker run -e MONGO_URI=${{ secrets.MONGO_URI }} -d -p 4000:4000 -p 4040:4040 --name ${{env.CONTAINER_NAME}} ${{ secrets.DOCKER_HUB_USERNAME }}/${{env.IMAGE_NAME}}:latest
