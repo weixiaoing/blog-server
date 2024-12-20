@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const registerUserHandlers = require("./socket/userHandler");
 const ICEServerHandlers = require("./ICEserver");
-
+const errorHandler = require("./middleware/errorHandler");
 const logger = require("logger");
 const app = express();
 require("dotenv").config("../env");
@@ -38,6 +38,7 @@ app.use("/post", require("./routes/post"));
 app.use("/file", require("./routes/file"));
 app.use("/summary", require("./routes/summary"));
 app.use(express.static("static"));
+app.use(errorHandler());
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
@@ -47,6 +48,9 @@ socketIO.on("connection", (socket) => {
   console.log(`⚡: ${socket.id} 用户已连接!`);
   registerUserHandlers(socketIO, socket);
   ICEServerHandlers(socketIO, socket);
+  console.log("rooms", socketIO.sockets.adapter.rooms.size);
+
+  // socket.emit("memberCount", { count: io.sockets.adapter.rooms.size });
   socket.on("disconnect", () => {
     console.log(`🔥: ${socket.id} 用户已断开连接!`);
   });
