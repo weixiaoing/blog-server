@@ -1,9 +1,8 @@
 const express = require("express");
-
 const bodyParser = require("body-parser");
 const registerUserHandlers = require("./socket/userHandler");
 const ICEServerHandlers = require("./ICEserver");
-const errorHandler = require("./middleware/errorHandler");
+const { errorHandler } = require("./middleware/common");
 const logger = require("logger");
 const app = express();
 require("dotenv").config("../env");
@@ -34,11 +33,11 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/post", require("./routes/post"));
-
+app.use("/download", express.static("static"));
 app.use("/file", require("./routes/file"));
 app.use("/summary", require("./routes/summary"));
-app.use(express.static("static"));
-app.use(errorHandler());
+app.use("/talk", require("./routes/talk"));
+app.use(errorHandler);
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

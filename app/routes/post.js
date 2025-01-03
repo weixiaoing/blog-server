@@ -30,7 +30,7 @@ router.post("/create", (req, res) => {
 });
 
 router.post("/findPostMeta", (req, res) => {
-  console.log(req.body);
+  console.log(req);
   findPostMeta(req.body)
     .then((data) => {
       res.json({

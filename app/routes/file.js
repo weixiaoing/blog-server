@@ -3,9 +3,14 @@ const router = express.Router();
 const multer = require("multer");
 const fse = require("fs-extra");
 const path = require("path");
+const File = require("../models/file");
+const { successResponse } = require("./utils");
+const { asyncHandler } = require("../middleware/common");
+
 // file upload
 const uploadPath = "./source";
 const finalDir = "./static";
+const downloadPath = "http://localhost:4000/download";
 if (!fse.pathExistsSync(uploadPath)) {
   fse.mkdirSync(uploadPath);
 }
@@ -38,7 +43,6 @@ router.post("/upload", upload.single("file"), (req, res) => {
   // 目标切片位置
   const tempChunkPath = path.resolve(tempFileDir, index);
 
-  console.log("req.file.path", req.file.path);
   // 当前切片位置（multer默认保存的位置）
   let currentChunkPath = path.resolve(req.file.path);
   if (!fse.existsSync(tempChunkPath)) {
@@ -46,11 +50,22 @@ router.post("/upload", upload.single("file"), (req, res) => {
   } else {
     fse.removeSync(currentChunkPath);
   }
-  res.send({
-    msg: "上传成功",
-    success: true,
-  });
+  setTimeout(() => {
+    res.send({
+      msg: "上传成功",
+      success: true,
+    });
+  }, 200);
 });
+
+router.delete(
+  "/delete",
+  asyncHandler(async (req, res) => {
+    const { _id } = req.body;
+    const result = await File.deleteOne({ _id });
+    successResponse(res, result);
+  })
+);
 
 router.get("/check", (req, res) => {
   const { hash, name } = req.query;
@@ -65,9 +80,10 @@ router.get("/check", (req, res) => {
 
 router.get("/merge", async (req, res) => {
   const { hash, name } = req.query;
-
+  const extname = path.extname(name);
   // 最终合并的文件路径
-  const filePath = path.resolve(finalDir, hash + path.extname(name));
+  const finalName = Date.now() + "-" + name;
+  const filePath = path.resolve(finalDir, finalName);
   // 临时文件夹路径
   let tempFileDir = path.resolve(tempDir, hash);
   // 读取临时文件夹，获取所有切片
@@ -89,19 +105,27 @@ router.get("/merge", async (req, res) => {
   await Promise.all(mergeTasks);
   // 等待所有切片追加到文件后，删除临时文件夹
   fse.removeSync(tempFileDir);
+  const findPath = downloadPath + "/" + finalName;
+  console.log("findPath", findPath);
 
+  File.create({
+    hash,
+    path: findPath,
+    name,
+    type: extname,
+  });
   res.send({
     msg: "合并成功",
     success: true,
   });
 });
-router.get("/download", (req, res) => {
-  const { hash, name } = req.query;
-  console.log("hash", hash);
-  console.log("name", name);
 
-  const targetPath = path.resolve(finalDir, hash + path.extname(name));
-  res.download(targetPath);
-});
+router.get(
+  "/getFiles",
+  asyncHandler(async (req, res) => {
+    const result = await File.find({}).sort({ createdAt: -1 });
+    successResponse(res, result);
+  })
+);
 
 module.exports = router;
