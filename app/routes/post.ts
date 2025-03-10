@@ -1,15 +1,15 @@
 // routes.js
-const express = require("express");
-const router = express.Router();
-const {
+import express from "express";
+import { OpenAI } from "openai";
+import {
   createPost,
-  findPost,
   deletePost,
-  updatePost,
+  findPost,
   findPostMeta,
   findWithPage,
-} = require("../control/post");
-const { default: OpenAI } = require("openai");
+  updatePost,
+} from "../control/post";
+const router = express.Router();
 
 // 帖子相关路由
 router.post("/create", (req, res) => {
@@ -147,4 +147,4 @@ router.post("/aiwrite", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

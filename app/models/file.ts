@@ -1,4 +1,5 @@
-const mongoose = require("../db.js");
+import mongoose from "@/config/db";
+
 const fileSchema = new mongoose.Schema(
   {
     hash: {
@@ -23,4 +24,4 @@ const fileSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("File", fileSchema, "file");
+export default mongoose.model("File", fileSchema, "file");

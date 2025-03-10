@@ -1,4 +1,4 @@
-const mongoose = require("../db.js");
+import mongoose from "@/config/db";
 const summarySchema = new mongoose.Schema(
   {
     content: {
@@ -16,4 +16,4 @@ const summarySchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Summary", summarySchema, "summary");
+export default mongoose.model("Summary", summarySchema, "summary");

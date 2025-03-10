@@ -1,12 +1,6 @@
-const {
-  getCommentList,
-  createComment,
-  replay,
-  reply,
-} = require("../control/comment");
-const comments = require("../models/comment");
+import { createComment, getCommentList, reply } from "../control/comment";
 
-module.exports = (io, socket) => {
+const userHandlers = (io, socket) => {
   socket.on("secrectMessage", ({ toId, msg }) => {
     io.to(toId).emit("secrectMessage", socket.id, msg);
   });
@@ -21,7 +15,7 @@ module.exports = (io, socket) => {
       io.to(room).emit("chatList", data.data);
     });
   });
-  socket.on("reply", ({ postId = "Home", ...data } = data) => {
+  socket.on("reply", ({ postId = "Home", ...data }) => {
     reply({ postId, ...data })
       .then((data) => {
         io.to(postId).emit("subChatOut", data.data);
@@ -31,3 +25,4 @@ module.exports = (io, socket) => {
       });
   });
 };
+export default userHandlers;

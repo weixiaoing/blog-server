@@ -1,6 +1,6 @@
-const express = require("express");
-const { createSummary, findSummary } = require("../control/summary");
-const friends = require("../models/friends");
+import express from "express";
+import { createSummary } from "../control/summary";
+import friends from "../models/friends";
 const router = express.Router();
 router.post("/create", async (req, res) => {
   const mongoResult = await friends.create(req.body);
@@ -20,4 +20,4 @@ router.post("/create", async (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

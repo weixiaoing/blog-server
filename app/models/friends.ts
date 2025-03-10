@@ -1,4 +1,6 @@
-const mongoose = require("../db.js");
+
+import mongoose from "@/config/db";
+
 const friendsSchema = new mongoose.Schema({
   avatar: {
     type: String,
@@ -18,4 +20,4 @@ const friendsSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Friends", friendsSchema, "friends");
+export default mongoose.model("Friends", friendsSchema, "friends");

@@ -1,4 +1,4 @@
-module.exports.successResponse = (res, data) => {
+export const successResponse = (res, data) => {
   res.json({
     code: 1,
     message: "success",

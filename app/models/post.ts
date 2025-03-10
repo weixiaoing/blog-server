@@ -1,4 +1,6 @@
-const mongoose = require("../db.js");
+
+import mongoose from "@/config/db";
+
 const postSchema = new mongoose.Schema({
   // 名称
   title: {
@@ -49,7 +51,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  children: [ 
+  children: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
@@ -58,4 +60,4 @@ const postSchema = new mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model("Post", postSchema, "post");
+export default mongoose.model("Post", postSchema, "post");

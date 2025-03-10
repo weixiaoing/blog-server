@@ -1,9 +1,8 @@
-const express = require("express");
-const { createSummary, findSummary } = require("../control/summary");
-const talk = require("../models/talking");
+import express from "express";
+import { asyncHandler } from "../middleware/common";
+import talk from "../models/talk";
+import { successResponse } from "./utils";
 const router = express.Router();
-const { asyncHandler } = require("../middleware/common");
-const { successResponse } = require("./utils");
 router.post(
   "/create",
   asyncHandler(async (req, res) => {
@@ -61,4 +60,4 @@ router.delete(
   })
 );
 
-module.exports = router;
+export default router;

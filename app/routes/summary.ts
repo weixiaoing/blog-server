@@ -1,5 +1,5 @@
-const express = require("express");
-const { createSummary, findSummary } = require("../control/summary");
+import express from "express";
+import { createSummary, findSummary } from "../control/summary";
 const router = express.Router();
 router.post("/create", (req, res) => {
   createSummary(req.body)
@@ -33,4 +33,4 @@ router.post("/find", (req, res) => {
       });
     });
 });
-module.exports = router;
+export default router;

@@ -1,13 +1,14 @@
-const post = require("../models/post");
+import post from "@/models/post";
 
-const createPost = async (req) => {
+
+export const createPost = async (req) => {
   return post.create(req).then((data) => {
     return { message: "创建成功", data };
   });
 };
 
 // 查元数据
-const findPostMeta = async (req) => {
+export const findPostMeta = async (req) => {
   if (req?.tags?.length > 0) {
     req.tags = { $in: req.tags };
   }
@@ -24,7 +25,7 @@ const findPostMeta = async (req) => {
     });
 };
 
-const findPost = async (req) => {
+export const findPost = async (req) => {
   return post
     .find({
       ...req,
@@ -35,19 +36,19 @@ const findPost = async (req) => {
     });
 };
 
-const deletePost = async (req) => {
+export const deletePost = async (req) => {
   return post.findByIdAndDelete(req).then((data) => {
     return data;
   });
 };
 
-const findWithPage = async (req) => {
+export const findWithPage = async (req) => {
   const { skip, limit, body } = req;
 
   return post.find(body).sort({ date: -1 }).skip(skip).limit(limit);
 };
 
-const updatePost = async (req) => {
+export const updatePost = async (req) => {
   return post
     .findByIdAndUpdate(req._id, {
       $set: { ...req.config, updatedAt: new Date() },
@@ -57,11 +58,3 @@ const updatePost = async (req) => {
     });
 };
 
-module.exports = {
-  createPost,
-  findPost,
-  deletePost,
-  updatePost,
-  findPostMeta,
-  findWithPage,
-};

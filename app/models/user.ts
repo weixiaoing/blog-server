@@ -1,4 +1,4 @@
-const mongoose = require("../db.js");
+import mongoose from "@/config/db";
 const usersSchema = new mongoose.Schema(
   {
     username: String,
@@ -13,5 +13,4 @@ const usersSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-module.exports = mongoose.model("Users", usersSchema, "users");
+export default mongoose.model("Users", usersSchema, "users");

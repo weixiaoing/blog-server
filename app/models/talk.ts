@@ -1,4 +1,4 @@
-const mongoose = require("../db.js");
+import mongoose from "@/config/db";
 const summarySchema = new mongoose.Schema(
   {
     content: {
@@ -11,4 +11,4 @@ const summarySchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Talk", summarySchema, "talk");
+export default mongoose.model("Talk", summarySchema, "talk");

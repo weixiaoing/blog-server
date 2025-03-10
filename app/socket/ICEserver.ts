@@ -1,4 +1,4 @@
-module.exports = (io, socket) => {
+const ICEServerHandlers = (io, socket) => {
   let callRoom = "";
   socket.on("join", ({ target }) => {
     socket.join(target);
@@ -28,3 +28,5 @@ module.exports = (io, socket) => {
     socket.to(callRoom).emit("left", { sender: socket.id });
   });
 };
+
+export default ICEServerHandlers;

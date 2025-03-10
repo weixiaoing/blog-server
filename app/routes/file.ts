@@ -1,12 +1,13 @@
-const express = require("express");
-const router = express.Router();
-const multer = require("multer");
-const fse = require("fs-extra");
-const path = require("path");
-const File = require("../models/file");
-const { successResponse } = require("./utils");
-const { asyncHandler } = require("../middleware/common");
+import { asyncHandler } from "./../middleware/common";
 
+import File from "@/models/file";
+import express from "express";
+import fse from "fs-extra";
+import multer from "multer";
+import path from "path";
+import { successResponse } from "./utils";
+
+const router = express.Router();
 // file upload
 const uploadPath = "./source";
 const finalDir = "./static";
@@ -44,7 +45,7 @@ router.post("/upload", upload.single("file"), (req, res) => {
   const tempChunkPath = path.resolve(tempFileDir, index);
 
   // 当前切片位置（multer默认保存的位置）
-  let currentChunkPath = path.resolve(req.file.path);
+  let currentChunkPath = path.resolve(req.file!.path);
   if (!fse.existsSync(tempChunkPath)) {
     fse.moveSync(currentChunkPath, tempChunkPath);
   } else {
@@ -71,7 +72,7 @@ router.get("/check", (req, res) => {
   const { hash, name } = req.query;
   //todo check if have this file
   //
-  let tempFileDir = path.resolve(tempDir, hash);
+  let tempFileDir = path.resolve(tempDir, hash as string);
   const chunkPaths = fse.readdirSync(tempFileDir);
   chunkPaths.map((chunkPath) => {
     console.log(chunkPath);
@@ -128,4 +129,4 @@ router.get(
   })
 );
 
-module.exports = router;
+export default router;

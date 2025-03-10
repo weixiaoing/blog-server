@@ -1,14 +1,8 @@
-// // routes.js
-
-// const express = require("express");
-// const router = express.Router();
-
-const comment = require("../models/comment");
+import comment from "@/models/comment";
 
 //创建一级评论
-const createComment = async (req) => {
+export const createComment = async (req) => {
   const props = { ...req, level: 1 };
-
   try {
     const data = await comment.create(props);
     return { message: "评论成功", data };
@@ -18,7 +12,7 @@ const createComment = async (req) => {
 };
 
 // 回复
-const reply = async (req) => {
+export const reply = async (req) => {
   try {
     // 创建
     const res = await comment.create(req);
@@ -41,7 +35,7 @@ const reply = async (req) => {
   }
 };
 
-const getCommentList = async (req) => {
+export const getCommentList = async (req) => {
   const { postId } = req;
   const result = await comment
     .find({ postId: postId, parent: null })
@@ -52,9 +46,4 @@ const getCommentList = async (req) => {
     .sort({ createdAt: -1 });
 
   return result;
-};
-module.exports = {
-  createComment,
-  getCommentList,
-  reply,
 };

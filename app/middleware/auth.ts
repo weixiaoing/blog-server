@@ -1,6 +1,7 @@
 // middleware/auth.js
-const jwt = require("jsonwebtoken");
 
+import env from "@/config/env";
+import jwt from "jsonwebtoken";
 const auth = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1]; // 从请求头中获取 token
 
@@ -8,7 +9,7 @@ const auth = (req, res, next) => {
     return res.status(403).json({ code: 0, message: "No token provided" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, env.AUTH_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).json({ code: 0, message: "Unauthorized" });
     }
@@ -17,4 +18,4 @@ const auth = (req, res, next) => {
   });
 };
 
-module.exports = auth;
+export default auth;
