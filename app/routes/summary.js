@@ -4,7 +4,6 @@ const router = express.Router();
 router.post("/create", (req, res) => {
   createSummary(req.body)
     .then((data) => {
-      console.log("create summary result", data);
       res.json({
         code: 1,
         message: "success",
@@ -12,7 +11,6 @@ router.post("/create", (req, res) => {
       });
     })
     .catch((error) => {
-      console.log("create summary error", error);
       res.json({
         status: 0,
         message: error,

@@ -43,20 +43,16 @@ const deletePost = async (req) => {
 
 const findWithPage = async (req) => {
   const { skip, limit, body } = req;
-  console.log(req, "req");
+
   return post.find(body).sort({ date: -1 }).skip(skip).limit(limit);
 };
 
 const updatePost = async (req) => {
-  console.log("updatePost", req);
-
   return post
     .findByIdAndUpdate(req._id, {
       $set: { ...req.config, updatedAt: new Date() },
     })
     .then((data) => {
-      console.log("data", data);
-
       return data;
     });
 };

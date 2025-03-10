@@ -29,7 +29,6 @@ router.post(
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(pageSize);
-    console.log(result);
 
     successResponse(res, {
       list: result,

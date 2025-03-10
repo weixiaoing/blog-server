@@ -30,7 +30,6 @@ router.post("/create", (req, res) => {
 });
 
 router.post("/findPostMeta", (req, res) => {
-  console.log(req);
   findPostMeta(req.body)
     .then((data) => {
       res.json({
@@ -66,7 +65,6 @@ router.post("/findWithPage", (req, res) => {
 
 router.post("/findPost", (req, res) => {
   const props = req.body;
-  console.log(props);
 
   findPost(props)
     .then((data) => {
@@ -111,8 +109,6 @@ router.post("/update", (req, res) => {
       });
     })
     .catch((error) => {
-      console.log(error);
-
       res.json({
         status: 0,
         message: "更新失败",
