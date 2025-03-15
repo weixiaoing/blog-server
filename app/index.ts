@@ -7,6 +7,7 @@ import log from "./common/chalk";
 import env from "./config/env";
 import { errorHandler } from "./middleware/common";
 import fileRouter from "./routes/file";
+import meetingRouter from "./routes/meeting";
 import postRouter from "./routes/post";
 import summryRouter from "./routes/summary";
 import talkRotuer from "./routes/talk";
@@ -38,6 +39,7 @@ app.use("/download", express.static("static"));
 app.use("/file", fileRouter);
 app.use("/summary", summryRouter);
 app.use("/talk", talkRotuer);
+app.use("/meeting", meetingRouter);
 app.use(errorHandler);
 
 server.listen(PORT, () => {

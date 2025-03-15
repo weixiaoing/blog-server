@@ -2,10 +2,8 @@
   "compilerOptions": {
     "target": "ES2015",
     "module": "commonjs",
-
     "strict": true, // 启用所有严格类型检查选项
     "noImplicitAny": false,
-
     "baseUrl": ".", // 指定模块解析的基目录
     "paths": {
       // 指定路径映射
