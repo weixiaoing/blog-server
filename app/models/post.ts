@@ -1,5 +1,5 @@
 
-import mongoose from "@/config/db";
+import mongoose from "@/lib/db";
 
 const postSchema = new mongoose.Schema({
   // 名称

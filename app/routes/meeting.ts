@@ -2,12 +2,13 @@ import express from "express";
 import { asyncHandler } from "../middleware/common";
 import meeting from "../models/meeting";
 import { successResponse } from "./utils";
+import log from "@/common/chalk";
 const router = express.Router();
 router.post(
   "/create",
   asyncHandler(async (req, res) => {
-    const { title, startTime, endTime } = req.body;
-    const result = await meeting.create({ title, startTime, endTime });
+    const { title, startTime, duration, hostId } = req.body;
+    const result = await meeting.create({ title, startTime, duration, hostId });
     successResponse(res, result);
   })
 );
@@ -19,13 +20,15 @@ router.post(
     const skip = (page - 1) * pageSize;
     const total = await meeting.countDocuments(query);
     const result = await meeting
-      .find(query)
+      .find({
+        ...query,
+      })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(pageSize);
 
     successResponse(res, {
-      list: result,
+      data: result,
       pagination: {
         total,
         page: Number(page),
@@ -37,15 +40,15 @@ router.post(
 );
 
 router.delete(
-  "/delete/:id",
+  "/delete",
   asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
+    const { _id } = req.query;
+    if (!_id) {
       const error = new Error("ID不能为空");
       error.status = 400;
       throw error;
     }
-    const result = await meeting.findByIdAndDelete(id);
+    const result = await meeting.findByIdAndDelete(_id);
     if (!result) {
       const error = new Error("未找到对应的记录");
       error.status = 404;

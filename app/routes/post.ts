@@ -1,12 +1,15 @@
 // routes.js
+import log from "@/common/chalk";
 import express from "express";
 import { OpenAI } from "openai";
 import {
+  addWatchs,
   createPost,
   deletePost,
   findPost,
   findPostMeta,
   findWithPage,
+  getPost,
   updatePost,
 } from "../control/post";
 const router = express.Router();
@@ -143,8 +146,31 @@ router.post("/aiwrite", async (req, res) => {
     const data = await getAi(content);
     res.json({ status: 1, data });
   } catch (error) {
-    console.log(error);
+    log.error(error);
   }
 });
+
+
+router.get("/getPost", async (req, res) => {
+  log.info('yes');
+  const { id } = req.query;
+  console.log(req.query);
+  getPost(id as string)
+    .then((data) => {
+      console.log(data);
+      res.json({
+        status: 1,
+        message: "success",
+        data,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        status: 0,
+        message: error,
+      })
+    })
+}
+)
 
 export default router;

@@ -1,4 +1,4 @@
-import mongoose from "@/config/db";
+import mongoose from "@/lib/db";
 
 const fileSchema = new mongoose.Schema(
   {

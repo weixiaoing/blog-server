@@ -6,6 +6,7 @@ import fse from "fs-extra";
 import multer from "multer";
 import path from "path";
 import { successResponse } from "./utils";
+import log from "@/common/chalk";
 
 const router = express.Router();
 // file upload
@@ -27,57 +28,52 @@ if (!fse.pathExistsSync(tempDir)) {
 }
 
 router.post("/upload", upload.single("file"), (req, res) => {
-  const { hash, index } = req.body;
-  console.log("get file");
-
-  console.log(req.body);
-
-  let tempFileDir = path.resolve(tempDir, hash);
-  console.log("tempDir", tempDir);
-
+  const { hash, index } = req.body
+  let tempFileDir = path.resolve(tempDir, hash)
   // 如果当前文件的临时文件夹不存在，则创建该文件夹
   if (!fse.pathExistsSync(tempFileDir)) {
-    fse.mkdirSync(tempFileDir);
+    fse.mkdirSync(tempFileDir)
   }
   // 如果无临时文件夹或不存在该切片，则将用户上传的切片移到临时文件夹里
   // 如果有临时文件夹并存在该切片，则删除用户上传的切片（因为用不到了）
   // 目标切片位置
-  const tempChunkPath = path.resolve(tempFileDir, index);
+  const tempChunkPath = path.resolve(tempFileDir, index)
 
   // 当前切片位置（multer默认保存的位置）
-  let currentChunkPath = path.resolve(req.file!.path);
+  let currentChunkPath = path.resolve(req.file!.path)
   if (!fse.existsSync(tempChunkPath)) {
-    fse.moveSync(currentChunkPath, tempChunkPath);
+    fse.moveSync(currentChunkPath, tempChunkPath)
   } else {
-    fse.removeSync(currentChunkPath);
+    fse.removeSync(currentChunkPath)
   }
   setTimeout(() => {
     res.send({
       msg: "上传成功",
       success: true,
-    });
-  }, 200);
-});
+    })
+  }, 200)
+})
 
 router.delete(
   "/delete",
   asyncHandler(async (req, res) => {
-    const { _id } = req.body;
-    const result = await File.deleteOne({ _id });
-    successResponse(res, result);
+    const { _id } = req.body
+    console.log('222');
+    log.info(_id)
+
+    const result = await File.findByIdAndDelete({ _id })
+    successResponse(res, result)
   })
-);
+)
 
 router.get("/check", (req, res) => {
-  const { hash, name } = req.query;
+  const { hash, name } = req.query
   //todo check if have this file
   //
-  let tempFileDir = path.resolve(tempDir, hash as string);
-  const chunkPaths = fse.readdirSync(tempFileDir);
-  chunkPaths.map((chunkPath) => {
-    console.log(chunkPath);
-  });
-});
+  let tempFileDir = path.resolve(tempDir, hash as string)
+  const chunkPaths = fse.readdirSync(tempFileDir)
+  chunkPaths.map((chunkPath) => { })
+})
 
 router.get("/merge", async (req, res) => {
   const { hash, name } = req.query;
@@ -107,7 +103,7 @@ router.get("/merge", async (req, res) => {
   // 等待所有切片追加到文件后，删除临时文件夹
   fse.removeSync(tempFileDir);
   const findPath = downloadPath + "/" + finalName;
-  console.log("findPath", findPath);
+
 
   File.create({
     hash,
@@ -128,5 +124,8 @@ router.get(
     successResponse(res, result);
   })
 );
+
+
+
 
 export default router;
